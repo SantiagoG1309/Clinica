@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}KORALY | Sistema Médico{% endblock %}</title>
+    <!-- Librerías externas -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --gradient-primary: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            --gradient-secondary: linear-gradient(135deg, #e74c3c 0%, #f1c40f 100%);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 8px rgba(0,0,0,0.12);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.15);
+            --border-radius: 1rem;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Mejorado */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-md);
+            padding: 1rem;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand i {
+            color: var(--secondary-color);
+            font-size: 1.75rem;
+        }
+
+        .nav-link {
+            color: var(--dark-color) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            position: relative;
+            margin: 0 0.25rem;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary-color) !important;
+            background: rgba(52, 152, 219, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Botones Personalizados */
+        .btn {
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+        }
+
+        .btn-secondary {
+            background: var(--gradient-secondary);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Tarjetas Mejoradas */
+        .card {
+            border: none;
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            background: var(--gradient-primary);
+            color: white;
+            font-weight: 600;
+            padding: 1.25rem;
+            border-bottom: none;
+        }
+
+        /* Alertas Personalizadas */
+        .alert {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #27ae60 100%);
+            color: white;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #c0392b 100%);
+            color: white;
+        }
+
+        /* Footer Mejorado */
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 3rem 0;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+
+        .footer-section h5 {
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-section ul li a {
+            color: var(--light-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--secondary-color);
+            padding-left: 0.5rem;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0.5rem;
+            }
+
+            .navbar-brand {
+                font-size: 1.25rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <i class="fas fa-heartbeat me-2"></i>
+                KORALY<span style="color: var(--secondary-color)">+</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">
+                            <i class="fas fa-home me-1"></i> Inicio
+                        </a>
+                    </li>
+
+                    {% if user.is_authenticated %}
+                        {% if user.is_paciente %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'explorar_medicos' %}">
+                                    <i class="fas fa-user-md me-1"></i> Explorar Médicos
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'historial_citas' %}">
+                                    <i class="fas fa-calendar-check me-1"></i> Mis Citas
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'perfil_paciente' %}">
+                                    <i class="fas fa-user-circle me-1"></i> Mi Perfil
+                                </a>
+                            </li>
+                        {% elif user.is_medico %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'citas_asignadas' %}">
+                                    <i class="fas fa-calendar me-1"></i> Mis Citas
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'mis_horarios' %}">
+                                    <i class="fas fa-clock me-1"></i> Mis Horarios
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'perfil_medico' %}">
+                                    <i class="fas fa-user-md me-1"></i> Mi Perfil
+                                </a>
+                            </li>
+                        {% elif user.is_admin %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'gestionar_pacientes' %}">
+                                    <i class="fas fa-users me-1"></i> Pacientes
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'gestionar_medicos' %}">
+                                    <i class="fas fa-user-md me-1"></i> Médicos
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'generar_reportes' %}">
+                                    <i class="fas fa-chart-bar me-1"></i> Reportes
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'perfil_admin' %}">
+                                    <i class="fas fa-user-shield me-1"></i> ADMIN
+                                </a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="{% url 'logout' %}">
+                                <i class="fas fa-sign-out-alt me-1"></i> Cerrar Sesión
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">
+                                <i class="fas fa-sign-in-alt me-1"></i> Iniciar Sesión
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'registro_paciente' %}">
+                                <i class="fas fa-user-plus me-1"></i> Registrarse
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mensajes -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Header Personalizado -->
+    {% block header %}{% endblock %}
+    
+    <!-- Contenido Principal -->
+    <main class="container my-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5>KORALY</h5>
+                    <p>Sistema de gestión médica integral para una mejor atención y servicio.</p>
+                </div>
+                <div class="footer-section">
+                    <h5>Enlaces Rápidos</h5>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Inicio</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'perfil_paciente' %}">Mi Perfil</a></li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                            <li><a href="{% url 'registro_paciente' %}">Registrarse</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h5>Contacto</h5>
+                    <ul>
+                        <li><i class="fas fa-phone me-2"></i> 3123818221</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@KORALY.com</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Calle Principal Siempre Viva 2#2-05</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="mt-4" style="border-color: rgba(255,255,255,0.1);">
+            <div class="text-center mt-4">
+                <p>&copy; {% now "Y" %} KORALY. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

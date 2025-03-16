@@ -1,0 +1,12 @@
+<!-- citas/templates/emails/recordatorio_cita.html -->
+<h2>Recordatorio de cita médica</h2>
+<p>Hola {{ cita.paciente.usuario.get_full_name }},</p>
+<p>Te recordamos que tienes una cita médica agendada:</p>
+<ul>
+    <li><strong>Fecha:</strong> {{ cita.fecha|date:"d/m/Y" }}</li>
+    <li><strong>Hora:</strong> {{ cita.hora|time:"H:i" }}</li>
+    <li><strong>Médico:</strong> {{ cita.medico.usuario.get_full_name }}</li>
+</ul>
+<p>Por favor, asegúrate de llegar a tiempo.</p>
+<p>Gracias,</p>
+<p>KORALY+</p>

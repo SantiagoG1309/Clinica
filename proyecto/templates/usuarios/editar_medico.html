@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Médico | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Editar Médico</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Editar Información de {{ medico.usuario.get_full_name }}</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">{{ form.first_name.label }}</label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}
+                                    <div class="text-danger">{{ form.first_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">{{ form.last_name.label }}</label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}
+                                    <div class="text-danger">{{ form.last_name.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">{{ form.email.label }}</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger">{{ form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.telefono.id_for_label }}" class="form-label">{{ form.telefono.label }}</label>
+                                {{ form.telefono }}
+                                {% if form.telefono.errors %}
+                                    <div class="text-danger">{{ form.telefono.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.biografia.id_for_label }}" class="form-label">{{ form.biografia.label }}</label>
+                            {{ form.biografia }}
+                            {% if form.biografia.errors %}
+                                <div class="text-danger">{{ form.biografia.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.direccion.id_for_label }}" class="form-label">{{ form.direccion.label }}</label>
+                            {{ form.direccion }}
+                            {% if form.direccion.errors %}
+                                <div class="text-danger">{{ form.direccion.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.experiencia.id_for_label }}" class="form-label">{{ form.experiencia.label }}</label>
+                            {{ form.experiencia }}
+                            {% if form.experiencia.errors %}
+                                <div class="text-danger">{{ form.experiencia.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.especialidades.label }}</label>
+                            {{ form.especialidades }}
+                            {% if form.especialidades.errors %}
+                                <div class="text-danger">{{ form.especialidades.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            <a href="{% url 'gestionar_medicos' %}" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <img src="{% if medico.usuario.foto %}{{ medico.usuario.foto.url }}{% else %}https://img.freepik.com/vector-premium/icono-medico-estetoscopio-logo-enfermera-examen-paciente-hospital-atencion-medica-salud_1234944-1591.jpg{% endif %}" 
+                         class="rounded-circle img-fluid mb-3 shadow-sm" 
+                         alt="Foto de perfil de {{ medico.usuario.get_full_name }}"
+                         style="width: 150px; height: 150px; object-fit: cover;">
+                    <h3>{{ medico.usuario.get_full_name }}</h3>
+                    <p class="text-muted">
+                        {% for especialidad in medico.especialidades.all %}
+                            <span class="badge bg-info me-1">{{ especialidad.nombre }}</span>
+                        {% endfor %}
+                    </p>
+                    <p><strong>Email:</strong> {{ medico.usuario.email }}</p>
+                    <p><strong>Teléfono:</strong> {{ medico.usuario.telefono|default:"No especificado" }}</p>
+                    <p><strong>Biografía:</strong> {{ medico.biografia|default:"No disponible" }}</p>
+                    <p><strong>Dirección:</strong> {{ medico.direccion|default:"No especificada" }}</p>
+                    <p><strong>Experiencia:</strong> {{ medico.experiencia|default:0 }} años</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

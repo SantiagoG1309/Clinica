@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Explorar Médicos | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-search me-2"></i>Buscar Médicos</h3>
+                </div>
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-5">
+                            <label for="{{ form.especialidad.id_for_label }}" class="form-label">
+                                <i class="fas fa-stethoscope me-2"></i>Especialidad
+                            </label>
+                            {{ form.especialidad }}
+                        </div>
+                        <div class="col-md-5">
+                            <label for="{{ form.fecha.id_for_label }}" class="form-label">
+                                <i class="fas fa-calendar-alt me-2"></i>Fecha de consulta
+                            </label>
+                            {{ form.fecha }}
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i>Buscar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        {% if medicos %}
+            {% for medico in medicos %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm hover-card">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                {% if medico.foto %}
+                                    <img src="{{ medico.foto.url }}" alt="Foto del médico" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                                {% else %}
+                                    <i class="fas fa-user-md fa-4x text-primary"></i>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title text-center">Dr(a). {{ medico.usuario.get_full_name }}</h5>
+                            <div class="text-center mb-3">
+                                {% for especialidad in medico.especialidades.all %}
+                                    <span class="badge bg-info rounded-pill me-1">{{ especialidad.nombre }}</span>
+                                {% endfor %}
+                            </div>
+                            <hr>
+                            {% if medico.biografia %}
+                                <p class="text-muted small">{{ medico.biografia|truncatechars:100 }}</p>
+                            {% endif %}
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-envelope me-2 text-primary"></i>{{ medico.usuario.email }}</li>
+                                <li><i class="fas fa-phone me-2 text-primary"></i>{{ medico.usuario.telefono }}</li>
+                                {% if medico.direccion %}
+                                    <li><i class="fas fa-map-marker-alt me-2 text-primary"></i>{{ medico.direccion }}</li>
+                                {% endif %}
+                                {% if medico.experiencia %}
+                                    <li><i class="fas fa-clock me-2 text-primary"></i>{{ medico.experiencia }} años de experiencia</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            {% if fecha_seleccionada %}
+                                <a href="{% url 'reservar_cita' medico.id fecha_seleccionada %}" 
+                                   class="btn btn-primary w-100">
+                                    <i class="fas fa-calendar-check me-2"></i>Reservar Cita
+                                </a>
+                            {% else %}
+                                <button class="btn btn-secondary w-100" disabled>
+                                    <i class="fas fa-calendar-alt me-2"></i>Selecciona una fecha
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    {% if form.is_valid %}
+                        No se encontraron médicos disponibles con los criterios seleccionados.
+                    {% else %}
+                        Utiliza el formulario de búsqueda para encontrar médicos disponibles.
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .hover-card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+    .badge {
+        font-size: 0.8rem;
+    }
+    .card-footer {
+        background-color: transparent;
+    }
+</style>
+{% endblock %}

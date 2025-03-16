@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestionar Médicos | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Gestionar Médicos</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Lista de Médicos</h4>
+            <a href="{% url 'agregar_medico' %}" class="btn btn-success float-end">Agregar Médico</a>
+        </div>
+        <div class="card-body">
+            {% if medicos %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Especialidad</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for medico in medicos %}
+                            <tr>
+                                <td>{{ medico.usuario.get_full_name }}</td>
+                                <td>
+                                    {% for especialidad in medico.especialidades.all %}
+                                        <span class="badge bg-info me-1">{{ especialidad.nombre }}</span>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'editar_medico' medico.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                    <a href="{% url 'eliminar_medico' medico.pk %}" class="btn btn-danger btn-sm">Eliminar</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-muted">No hay médicos registrados.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

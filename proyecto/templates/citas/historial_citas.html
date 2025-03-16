@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Citas | {{ block.super }}{% endblock %}
+
+{% block header %}
+<div class="page-header">
+    <div class="container">
+        <h1>Mis Citas</h1>
+        <p class="lead">Historial y gestión de tus citas médicas</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Mis Citas</h4>
+                    <a href="{% url 'explorar_medicos' %}" class="btn btn-light">
+                        <i class="fas fa-plus-circle me-1"></i> Nueva Cita
+                    </a>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs mb-3" id="citasTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="proximas-tab" data-bs-toggle="tab" data-bs-target="#proximas" type="button" role="tab" aria-controls="proximas" aria-selected="true">
+                                <i class="fas fa-calendar me-1"></i> Próximas
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="pasadas-tab" data-bs-toggle="tab" data-bs-target="#pasadas" type="button" role="tab" aria-controls="pasadas" aria-selected="false">
+                                <i class="fas fa-history me-1"></i> Pasadas
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="canceladas-tab" data-bs-toggle="tab" data-bs-target="#canceladas" type="button" role="tab" aria-controls="canceladas" aria-selected="false">
+                                <i class="fas fa-times-circle me-1"></i> Canceladas
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="citasTabsContent">
+                        <!-- Próximas Citas -->
+                        <div class="tab-pane fade show active" id="proximas" role="tabpanel" aria-labelledby="proximas-tab">
+                            {% if citas_proximas %}
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Médico</th>
+                                                <th>Especialidad</th>
+                                                <th>Fecha</th>
+                                                <th>Hora</th>
+                                                <th>Estado</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for cita in citas_proximas %}
+                                                <tr>
+                                                    <td>Dr. {{ cita.medico.usuario.get_full_name }}</td>
+                                                    <td>
+                                                        {% for especialidad in cita.medico.especialidades.all %}
+                                                            <span class="badge bg-info">{{ especialidad.nombre }}</span>
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td>{{ cita.fecha|date:"d/m/Y" }}</td>
+                                                    <td>{{ cita.hora|time:"H:i" }}</td>
+                                                    <td><span class="badge bg-primary">{{ cita.get_estado_display }}</span></td>
+                                                    <td>
+                                                        <a href="{% url 'cancelar_cita' cita.id %}" class="btn btn-sm btn-danger">
+                                                            <i class="fas fa-times-circle"></i> Cancelar
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    No tienes citas próximas programadas.
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Citas Pasadas -->
+                        <div class="tab-pane fade" id="pasadas" role="tabpanel" aria-labelledby="pasadas-tab">
+                            {% if citas_pasadas %}
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Médico</th>
+                                                <th>Especialidad</th>
+                                                <th>Fecha</th>
+                                                <th>Hora</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for cita in citas_pasadas %}
+                                                <tr>
+                                                    <td>Dr. {{ cita.medico.usuario.get_full_name }}</td>
+                                                    <td>
+                                                        {% for especialidad in cita.medico.especialidades.all %}
+                                                            <span class="badge bg-info">{{ especialidad.nombre }}</span>
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td>{{ cita.fecha|date:"d/m/Y" }}</td>
+                                                    <td>{{ cita.hora|time:"H:i" }}</td>
+                                                    <td><span class="badge bg-secondary">{{ cita.get_estado_display }}</span></td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    No tienes citas pasadas.
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Citas Canceladas -->
+                        <div class="tab-pane fade" id="canceladas" role="tabpanel" aria-labelledby="canceladas-tab">
+                            {% if citas_canceladas %}
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Médico</th>
+                                                <th>Especialidad</th>
+                                                <th>Fecha</th>
+                                                <th>Hora</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for cita in citas_canceladas %}
+                                                <tr>
+                                                    <td>Dr. {{ cita.medico.usuario.get_full_name }}</td>
+                                                    <td>
+                                                        {% for especialidad in cita.medico.especialidades.all %}
+                                                            <span class="badge bg-info">{{ especialidad.nombre }}</span>
+                                                        {% endfor %}
+                                                    </td>
+                                                    <td>{{ cita.fecha|date:"d/m/Y" }}</td>
+                                                    <td>{{ cita.hora|time:"H:i" }}</td>
+                                                    <td><span class="badge bg-danger">{{ cita.get_estado_display }}</span></td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    No tienes citas canceladas.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var triggerTabList = [].slice.call(document.querySelectorAll('#citasTabs button'));
+        triggerTabList.forEach(function(triggerEl) {
+            var tabTrigger = new bootstrap.Tab(triggerEl);
+            triggerEl.addEventListener('click', function(event) {
+                event.preventDefault();
+                tabTrigger.show();
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Horario | {{ block.super }}{% endblock %}
+
+{% block header %}
+<div class="page-header">
+    <div class="container">
+        <h1>Editar Horario</h1>
+        <p class="lead">Modifica los detalles del horario de atención</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Editar Horario</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'mis_horarios' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Volver
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

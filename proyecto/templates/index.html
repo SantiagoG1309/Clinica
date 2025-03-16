@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<header class="hero-section position-relative text-white">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-7 order-2 order-md-1">
+                <h1 class="display-2 fw-bold mb-3 animate__animated animate__fadeInLeft">Bienvenido al Futuro de la Salud</h1>
+                <p class="lead mb-4 animate__animated animate__fadeInLeft animate__delay-1s">
+                    Descubre el sistema de gestión de citas médicas más innovador, donde la tecnología se une a tu bienestar.
+                </p>
+                {% if not user.is_authenticated %}
+                    <div class="d-flex gap-3 mt-4 animate__animated animate__fadeInLeft animate__delay-2s">
+                        <a href="{% url 'login' %}" class="btn btn-light btn-lg shadow animate__pulse">Acceso Seguro</a>
+                        <a href="{% url 'registro_paciente' %}" class="btn btn-outline-light btn-lg shadow animate__pulse">Únete Ahora</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6 col-md-5 order-1 order-md-2 text-center animate__animated animate__fadeInRight">
+                <img src="https://play-lh.googleusercontent.com/vbfkb6wrXust6r8BWLQErOm2tc9QLDIwwMA-cSas0L03cdoJ1waYaJ49dnBqZdcOwl4i" alt="Innovación en Salud" class="img-fluid rounded-circle shadow-lg border border-light">
+            </div>
+        </div>
+    </div>
+    <!-- Fondo animado con canvas -->
+    <canvas id="headerCanvas" class="position-absolute top-0 start-0 w-100 h-100"></canvas>
+</header>
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+    <!-- Características Destacadas -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+            <div class="card h-100 border-0 shadow-lg hover-transform">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-user-md fa-3x text-info mb-3"></i>
+                    <h3 class="card-title fw-bold">Expertos de Vanguardia</h3>
+                    <p class="card-text text-muted">
+                        Nuestros especialistas integran lo último en tecnología para cuidar de tu salud.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+            <div class="card h-100 border-0 shadow-lg hover-transform">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-calendar-alt fa-3x text-info mb-3"></i>
+                    <h3 class="card-title fw-bold">Citas sin Fronteras</h3>
+                    <p class="card-text text-muted">
+                        Agenda y gestiona tus citas de forma intuitiva y en tiempo real, desde cualquier dispositivo.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+            <div class="card h-100 border-0 shadow-lg hover-transform">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-bell fa-3x text-info mb-3"></i>
+                    <h3 class="card-title fw-bold">Alertas Inteligentes</h3>
+                    <p class="card-text text-muted">
+                        Recibe recordatorios personalizados para que nunca pierdas una consulta importante.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secciones Interactivas -->
+    <div class="row g-5">
+        <div class="col-md-6">
+            <h2 class="fw-bold text-dark mb-4 animate__animated animate__fadeInUp">¿Cómo Revolucionamos tu Salud?</h2>
+            <div class="accordion accordion-flush" id="innovacionAccordion">
+                <div class="accordion-item shadow-sm rounded mb-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#stepOne">
+                            1. Creación de Cuenta Segura
+                        </button>
+                    </h2>
+                    <div id="stepOne" class="accordion-collapse collapse show" data-bs-parent="#innovacionAccordion">
+                        <div class="accordion-body text-muted">
+                            Regístrate de forma rápida y protege tus datos con la más avanzada tecnología en seguridad.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item shadow-sm rounded mb-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#stepTwo">
+                            2. Exploración de Especialistas
+                        </button>
+                    </h2>
+                    <div id="stepTwo" class="accordion-collapse collapse" data-bs-parent="#innovacionAccordion">
+                        <div class="accordion-body text-muted">
+                            Descubre perfiles completos de especialistas y encuentra el que mejor se adapte a ti.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item shadow-sm rounded mb-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#stepThree">
+                            3. Reserva Inmediata
+                        </button>
+                    </h2>
+                    <div id="stepThree" class="accordion-collapse collapse" data-bs-parent="#innovacionAccordion">
+                        <div class="accordion-body text-muted">
+                            Selecciona y confirma tu cita en tiempo real sin complicaciones ni esperas.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item shadow-sm rounded">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#stepFour">
+                            4. Gestión Total de tu Salud
+                        </button>
+                    </h2>
+                    <div id="stepFour" class="accordion-collapse collapse" data-bs-parent="#innovacionAccordion">
+                        <div class="accordion-body text-muted">
+                            Controla y revisa todas tus citas desde un panel intuitivo y moderno, donde la tecnología se une a tu bienestar.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2 class="fw-bold text-dark mb-4 animate__animated animate__fadeInUp">Especialidades Médicas de Última Generación</h2>
+            <div class="row g-3">
+                <div class="col-6">
+                    <div class="specialty-box p-3 bg-light rounded-3 shadow-sm hover-transform d-flex align-items-center">
+                        <i class="fas fa-heartbeat text-danger me-3 fa-2x"></i>
+                        <span class="fw-semibold">Cardiología</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="specialty-box p-3 bg-light rounded-3 shadow-sm hover-transform d-flex align-items-center">
+                        <i class="fas fa-brain text-info me-3 fa-2x"></i>
+                        <span class="fw-semibold">Neurología</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="specialty-box p-3 bg-light rounded-3 shadow-sm hover-transform d-flex align-items-center">
+                        <i class="fas fa-bone text-warning me-3 fa-2x"></i>
+                        <span class="fw-semibold">Traumatología</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="specialty-box p-3 bg-light rounded-3 shadow-sm hover-transform d-flex align-items-center">
+                        <i class="fas fa-lungs text-success me-3 fa-2x"></i>
+                        <span class="fw-semibold">Neumología</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="specialty-box p-3 bg-light rounded-3 shadow-sm hover-transform d-flex align-items-center">
+                        <i class="fas fa-eye text-primary me-3 fa-2x"></i>
+                        <span class="fw-semibold">Oftalmología</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="specialty-box p-3 bg-light rounded-3 shadow-sm hover-transform d-flex align-items-center">
+                        <i class="fas fa-tooth text-secondary me-3 fa-2x"></i>
+                        <span class="fw-semibold">Odontología</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Sección de encabezado futurista con canvas animado */
+    .hero-section {
+        background: linear-gradient(135deg, #1d2671, #c33764);
+        position: relative;
+        overflow: hidden;
+        padding: 80px 0;
+    }
+    /* Efecto hover para tarjetas y secciones */
+    .hover-transform {
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .hover-transform:hover {
+        transform: translateY(-8px) scale(1.03);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    /* Personalización del acordeón */
+    .accordion-button:not(.collapsed) {
+        background-color: #e9ecef;
+        color: #1d2671;
+    }
+    /* Canvas de fondo en header */
+    #headerCanvas {
+        pointer-events: none;
+        z-index: 0;
+    }
+    /* Ajustes responsivos */
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 60px 0;
+        }
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<script>
+    // Efecto animado de fondo usando canvas para un toque futurista
+    document.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('headerCanvas');
+        if (canvas && canvas.getContext) {
+            const ctx = canvas.getContext('2d');
+            const stars = [];
+            const numStars = 100;
+            const width = canvas.width = window.innerWidth;
+            const height = canvas.height = window.innerHeight;
+            
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 1.5,
+                    speed: Math.random() * 0.5 + 0.2
+                });
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                for (const star of stars) {
+                    star.y -= star.speed;
+                    if (star.y < 0) {
+                        star.y = height;
+                    }
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    ctx.fill();
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+    });
+</script>
+{% endblock %}

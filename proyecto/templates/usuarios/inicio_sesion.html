@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión | {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .login-container {
+        animation: fadeIn 0.5s ease forwards;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 3rem 0;
+    }
+
+    .login-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-header {
+        background: linear-gradient(135deg, #36D1DC 0%, #5B86E5 100%);
+        padding: 2.5rem;
+        text-align: center;
+    }
+
+    .login-header i {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        color: white;
+        animation: pulse 2s infinite;
+    }
+
+    .login-header h3 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e0e0e0;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: #5B86E5;
+        box-shadow: 0 0 0 0.25rem rgba(91, 134, 229, 0.25);
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+
+    .login-footer {
+        background: #f8f9fa;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .login-footer a {
+        color: #5B86E5;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .login-footer a:hover {
+        color: #36D1DC;
+        text-decoration: none;
+        transform: translateY(-1px);
+    }
+
+    .btn-login {
+        background: linear-gradient(135deg, #36D1DC 0%, #5B86E5 100%);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+        margin-top: 1rem;
+        border: none;
+    }
+
+    .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(91, 134, 229, 0.2);
+    }
+
+    .error-message {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+        color: white;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    .input-group-text {
+        background: transparent;
+        border: 2px solid #e0e0e0;
+        border-right: none;
+        color: #5B86E5;
+    }
+
+    .input-group .form-control {
+        border-left: none;
+    }
+
+    .remember-me {
+        margin-top: 1rem;
+    }
+
+    .divider {
+        margin: 1.5rem 0;
+        text-align: center;
+        position: relative;
+    }
+
+    .divider::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 45%;
+        height: 1px;
+        background: #e0e0e0;
+    }
+
+    .divider::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 50%;
+        width: 45%;
+        height: 1px;
+        background: #e0e0e0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card login-card">
+                    <div class="login-header">
+                        <i class="fas fa-user-circle"></i>
+                        <h3 class="text-white mb-0">¡Bienvenido!</h3>
+                        <p class="text-white-50 mb-0">Ingresa a tu cuenta</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="post" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            
+                            {% if form.errors %}
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                Los datos ingresados son incorrectos. Por favor, inténtalo de nuevo.
+                            </div>
+                            {% endif %}
+                            
+                            <div class="mb-4">
+                                <label for="{{ form.username.id_for_label }}" class="form-label">
+                                    <i class="fas fa-user me-2"></i>Usuario
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    {{ form.username }}
+                                </div>
+                                {% if form.username.errors %}
+                                <div class="text-danger mt-2">
+                                    <i class="fas fa-exclamation-circle me-1"></i>
+                                    {{ form.username.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="{{ form.password.id_for_label }}" class="form-label">
+                                    <i class="fas fa-lock me-2"></i>Contraseña
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    {{ form.password }}
+                                </div>
+                                {% if form.password.errors %}
+                                <div class="text-danger mt-2">
+                                    <i class="fas fa-exclamation-circle me-1"></i>
+                                    {{ form.password.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="remember-me form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">Recordar mi sesión</label>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-login">
+                                <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                            </button>
+
+
+                            <br>
+                        </form>
+                    </div>
+                    <div class="card-footer login-footer p-4">
+                        <div class="text-center">
+                            <p class="mb-2">
+                                <i class="fas fa-key me-2"></i>
+                                ¿Olvidaste tu contraseña? 
+                                <a href="{% url 'password_reset' %}" class="text-decoration-none">Recuperar contraseña</a>
+                            </p>
+                            <p class="mb-0">
+                                <i class="fas fa-user-plus me-2"></i>
+                                ¿No tienes una cuenta? 
+                                <a href="{% url 'registro_paciente' %}" class="text-decoration-none">Regístrate aquí</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
