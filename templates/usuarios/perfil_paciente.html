@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi Perfil | {{ block.super }}{% endblock %}
+
+{% block header %}
+<div class="page-header">
+    <div class="container">
+        <h1>Mi Perfil</h1>
+        <p class="lead">Gestiona tu información personal</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <i class="fas fa-user-circle fa-5x text-primary mb-3"></i>
+                <h3>{{ user.get_full_name }}</h3>
+                <p class="text-muted">Paciente</p>
+                <p><i class="fas fa-envelope me-2"></i> {{ user.email }}</p>
+                <p><i class="fas fa-phone me-2"></i> {{ user.telefono }}</p>
+            </div>
+        </div>
+        
+        <div class="list-group mb-4">
+            <a href="{% url 'perfil_paciente' %}" class="list-group-item list-group-item-action active">
+                <i class="fas fa-user me-2"></i> Mi Perfil
+            </a>
+            <a href="{% url 'historial_citas' %}" class="list-group-item list-group-item-action">
+                <i class="fas fa-calendar-check me-2"></i> Mis Citas
+            </a>
+            <a href="{% url 'explorar_medicos' %}" class="list-group-item list-group-item-action">
+                
+                <i class="fas fa-user-md me-2"></i> Explorar Médicos
+            </a>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Editar Perfil</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label">Nombre</label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div class="text-danger">
+                                    {{ form.first_name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label">Apellido</label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <div class="text-danger">
+                                    {{ form.last_name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.documento_identidad.id_for_label }}" class="form-label">Documento de Identidad</label>
+                            {{ form.documento_identidad }}
+                            {% if form.documento_identidad.errors %}
+                                <div class="text-danger">
+                                    {{ form.documento_identidad.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.edad.id_for_label }}" class="form-label">Edad</label>
+                            {{ form.edad }}
+                            {% if form.edad.errors %}
+                                <div class="text-danger">
+                                    {{ form.edad.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">Correo Electrónico</label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger">
+                                    {{ form.email.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.telefono.id_for_label }}" class="form-label">Teléfono</label>
+                            {{ form.telefono }}
+                            {% if form.telefono.errors %}
+                                <div class="text-danger">
+                                    {{ form.telefono.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

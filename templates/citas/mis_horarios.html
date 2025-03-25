@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Horarios | {{ block.super }}{% endblock %}
+
+{% block header %}
+<div class="page-header">
+    <div class="container">
+        <h1>Mis Horarios</h1>
+        <p class="lead">Gestiona tus horarios de atención</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-end">
+            <a href="{% url 'agregar_horario' %}" class="btn btn-primary">
+                <i class="fas fa-plus-circle me-1"></i> Agregar Horario
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Horarios de Atención</h4>
+            </div>
+            <div class="card-body">
+                {% if horarios %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Hora Inicio</th>
+                                    <th>Hora Fin</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for horario in horarios %}
+                                    <tr>
+                                        <td>{{ horario.fecha|date:"l d F Y" }}</td>
+                                        <td>{{ horario.hora_inicio|time:"H:i" }}</td>
+                                        <td>{{ horario.hora_fin|time:"H:i" }}</td>
+                                        <td>
+                                            <a href="{% url 'editar_horario' horario.id %}" class="btn btn-sm btn-warning me-1">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
+                                            <a href="{% url 'eliminar_horario' horario.id %}" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i> Eliminar
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>No tienes horarios de atención configurados.</p>
+                        <a href="{% url 'agregar_horario' %}" class="btn btn-primary mt-2">
+                            <i class="fas fa-plus-circle me-1"></i> Agregar Horario
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

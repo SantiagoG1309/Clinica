@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Reporte de Citas Diarias | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Reporte de Citas Diarias - {{ fecha|date:'d/m/Y' }}</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Lista de Citas</h4>
+            <a href="{% url 'generar_reportes' %}" class="btn btn-secondary float-end">Volver</a>
+        </div>
+        <div class="card-body">
+            {% if citas %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Paciente</th>
+                            <th>Médico</th>
+                            <th>Hora</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cita in citas %}
+                            <tr>
+                                <td>{{ cita.paciente }}</td>
+                                <td>{{ cita.medico }}</td>
+                                <td>{{ cita.hora|time:'H:i' }}</td>
+                                <td>{{ cita.get_estado_display }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{% url 'exportar_pdf' tipo_reporte %}?fecha={{ fecha|date:'Y-m-d' }}" class="btn btn-secondary">Exportar a PDF</a>
+                <a href="{% url 'exportar_excel' tipo_reporte %}?fecha={{ fecha|date:'Y-m-d' }}" class="btn btn-success">Exportar a Excel</a>
+            {% else %}
+                <p class="text-muted">No hay citas registradas para el {{ fecha|date:'d/m/Y' }}.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

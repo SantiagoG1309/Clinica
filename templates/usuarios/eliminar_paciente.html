@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Eliminar Paciente | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Eliminar Paciente</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Confirmar Eliminación</h4>
+        </div>
+        <div class="card-body">
+            <p>¿Estás seguro de que deseas eliminar al paciente <strong>{{ paciente.usuario.get_full_name }}</strong>?</p>
+            <p>Esta acción también eliminará al usuario asociado y no se podrá deshacer.</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+                <a href="{% url 'gestionar_pacientes' %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

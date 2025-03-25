@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}Reservar Cita | {{ block.super }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card {
+        border-radius: 15px;
+        border: none;
+    }
+    .doctor-card {
+        background-color: #f8f9fa;
+    }
+    .appointment-info {
+        background-color: #e9ecef;
+    }
+    .btn-confirm {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+    }
+    .btn-confirm:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+    .btn-back {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+    .btn-back:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+    .error-message {
+        color: #dc3545;
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <i class="fas {% if message.tags == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Doctor Information Card -->
+            <div class="card shadow-sm mb-4 doctor-card">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-md me-2"></i>Información del Médico
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center mb-3 mb-md-0">
+                            {% if medico.foto %}
+                                <img src="{{ medico.foto.url }}" alt="Foto del médico" class="rounded-circle img-fluid" style="width: 120px; height: 120px; object-fit: cover;">
+                            {% else %}
+                                <div class="display-4 text-primary">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-9">
+                            <h5 class="mb-3">Dr(a). {{ medico.usuario.get_full_name }}</h5>
+                            <div class="mb-3">
+                                {% for especialidad in medico.especialidades.all %}
+                                    <span class="badge bg-info rounded-pill me-1">{{ especialidad.nombre }}</span>
+                                {% endfor %}
+                            </div>
+                            <div class="appointment-info p-3 rounded">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="mb-2">
+                                            <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                                            <strong>Fecha:</strong> {{ fecha|date:"l d F Y" }}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="mb-2">
+                                            <i class="fas fa-clock me-2 text-primary"></i>
+                                            <strong>Duración:</strong> 30 minutos
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Appointment Form Card -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white py-3">
+                    <h4 class="mb-0">
+                        <i class="fas fa-calendar-check me-2"></i>Reservar Cita
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        {{ form.medico }}
+                        {{ form.fecha }}
+                        
+                        <div class="mb-4">
+                            <label for="{{ form.hora.id_for_label }}" class="form-label">
+                                <i class="fas fa-clock me-2"></i>Hora disponible
+                            </label>
+                            {{ form.hora }}
+                            {% if form.hora.help_text %}
+                                <div class="form-text text-muted small">
+                                    <i class="fas fa-info-circle me-1"></i>{{ form.hora.help_text }}
+                                </div>
+                            {% endif %}
+                            {% if form.hora.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.hora.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    <p class="mb-0"><i class="fas fa-exclamation-circle me-2"></i>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg btn-confirm">
+                                <i class="fas fa-calendar-check me-2"></i>Confirmar Cita
+                            </button>
+                            <a href="{% url 'explorar_medicos' %}" class="btn btn-secondary btn-back">
+                                <i class="fas fa-arrow-left me-2"></i>Volver
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation
+    const form = document.querySelector('.needs-validation');
+    form.addEventListener('submit', function(event) {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+    });
+
+    // Time slot selection enhancement
+    const horaSelect = document.getElementById('{{ form.hora.id_for_label }}');
+    if (horaSelect) {
+        horaSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.value) {
+                this.classList.add('is-valid');
+                this.classList.remove('is-invalid');
+            } else {
+                this.classList.add('is-invalid');
+                this.classList.remove('is-valid');
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+
+{% endblock %}

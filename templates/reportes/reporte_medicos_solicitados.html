@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Reporte de Médicos Más Solicitados | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Reporte de Médicos Más Solicitados - {{ fecha_inicio|date:'d/m/Y' }} a {{ fecha_fin|date:'d/m/Y' }}</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Lista de Médicos</h4>
+            <a href="{% url 'generar_reportes' %}" class="btn btn-secondary float-end">Volver</a>
+        </div>
+        <div class="card-body">
+            {% if medicos_solicitados %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Médico</th>
+                            <th>Especialidades</th>
+                            <th>Total Citas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for medico in medicos_solicitados %}
+                            <tr>
+                                <td>{{ medico.usuario.get_full_name }}</td>
+                                <td>
+                                    {% for especialidad in medico.especialidades.all %}
+                                        <span class="badge bg-info me-1">{{ especialidad.nombre }}</span>
+                                    {% endfor %}
+                                </td>
+                                <td>{{ medico.total_citas }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{% url 'exportar_pdf' tipo_reporte %}?fecha_inicio={{ fecha_inicio|date:'Y-m-d' }}&fecha_fin={{ fecha_fin|date:'Y-m-d' }}" class="btn btn-secondary">Exportar a PDF</a>
+                <a href="{% url 'exportar_excel' tipo_reporte %}?fecha_inicio={{ fecha_inicio|date:'Y-m-d' }}&fecha_fin={{ fecha_fin|date:'Y-m-d' }}" class="btn btn-success">Exportar a Excel</a>
+            {% else %}
+                <p class="text-muted">No hay médicos con citas en el período seleccionado.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

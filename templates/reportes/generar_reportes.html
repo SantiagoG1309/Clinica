@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Generar Reportes | {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Generar Reportes</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Seleccionar Tipo de Reporte</h4>
+        </div>
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="reporteTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="citas-diarias-tab" data-bs-toggle="tab" href="#citas-diarias" role="tab" aria-controls="citas-diarias" aria-selected="true">Citas Diarias</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="medicos-solicitados-tab" data-bs-toggle="tab" href="#medicos-solicitados" role="tab" aria-controls="medicos-solicitados" aria-selected="false">Médicos Más Solicitados</a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="reporteTabsContent">
+                <!-- Tab para Citas Diarias -->
+                <div class="tab-pane fade show active" id="citas-diarias" role="tabpanel" aria-labelledby="citas-diarias-tab">
+                    <form method="get" action="{% url 'reporte_citas_diarias' %}" class="mt-3">
+                        <div class="mb-3">
+                            <label for="fecha" class="form-label">Fecha</label>
+                            <input type="date" name="fecha" id="fecha" class="form-control" value="{{ timezone.now|date:'Y-m-d' }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Generar Reporte</button>
+                        <a href="{% url 'exportar_pdf' 'citas-diarias' %}?fecha={{ timezone.now|date:'Y-m-d' }}" class="btn btn-secondary">Exportar a PDF</a>
+                        <a href="{% url 'exportar_excel' 'citas-diarias' %}?fecha={{ timezone.now|date:'Y-m-d' }}" class="btn btn-success">Exportar a Excel</a>
+                    </form>
+                </div>
+
+                <!-- Tab para Médicos Más Solicitados -->
+                <div class="tab-pane fade" id="medicos-solicitados" role="tabpanel" aria-labelledby="medicos-solicitados-tab">
+                    <form method="get" action="{% url 'reporte_medicos_solicitados' %}" class="mt-3">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="fecha_inicio" class="form-label">Fecha Inicio</label>
+                                <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" value="{{ timezone.now|date:'Y-m-01' }}">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="fecha_fin" class="form-label">Fecha Fin</label>
+                                <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" value="{{ timezone.now|date:'Y-m-d' }}">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Generar Reporte</button>
+                        <a href="{% url 'exportar_pdf' 'medicos-solicitados' %}?fecha_inicio={{ timezone.now|date:'Y-m-01' }}&fecha_fin={{ timezone.now|date:'Y-m-d' }}" class="btn btn-secondary mt-3">Exportar a PDF</a>
+                        <a href="{% url 'exportar_excel' 'medicos-solicitados' %}?fecha_inicio={{ timezone.now|date:'Y-m-01' }}&fecha_fin={{ timezone.now|date:'Y-m-d' }}" class="btn btn-success mt-3">Exportar a Excel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
